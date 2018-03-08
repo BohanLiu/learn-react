@@ -74,7 +74,11 @@ class Board extends React.Component {
     const winner = calculateWinner(this.state.squares);
     let status;
     if (winner) {
-      status = 'Winner: ' + winner;
+      if (winner === 'tie') {
+        status = 'Tie!';
+      } else {
+        status = 'Winner: ' + winner;
+      }
     } else {
       status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
     }
@@ -144,6 +148,17 @@ function calculateWinner(squares) {
       return squares[a];
     }
   }
+
+  // tie game?
+  for (let i = 0, count = 0; i < squares.length; i++) {
+    if (squares[i]) {
+      count++;
+    }
+    if (count === squares.length) {
+      return 'tie';
+    }
+  }
+
   return null;
 }
 
