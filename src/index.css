@@ -36,6 +36,10 @@ ol, ul {
   outline: none;
 }
 
+.square:hover {
+  border: 2px solid #999;
+}
+
 .kbd-navigation .square:focus {
   background: #ddd;
 }
@@ -49,3 +53,6 @@ ol, ul {
   margin-left: 20px;
 }
 
+.jump-history-button:hover {
+  font-weight: bold;
+}
