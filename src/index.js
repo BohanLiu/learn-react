@@ -49,7 +49,8 @@ class Board extends React.Component {
 
   renderSquare(i) {
     return (
-      <Square 
+      <Square
+        key={i}
         value={this.props.squares[i]}
         onClick={() => this.props.onClick(i)}
       />
@@ -59,25 +60,51 @@ class Board extends React.Component {
   render() {
     console.log('render board');
 
-    return (
-      <div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
-      </div>
-    );
+    let boardRows = [];
+    for (let row = 0; row < 3; row++) {
+      let squares = [];
+      for (let col = 0; col < 3; col++) {
+        squares.push(this.renderSquare(row * 3 + col));
+      }
+      let boardRow = (<div key={row} className="board-row">{squares}</div>);
+      boardRows.push(boardRow);
+    }
+    return <div>{boardRows}</div>;
+
+    // return (
+    //   <div>
+    //     {Array(3).fill(null).map((_, row) => {
+    //       return (
+    //         <div key={row} className="board-row">
+    //           {Array(3).fill(row).map((_, col) => {
+    //             let num = row * 3 + col;
+    //             return this.renderSquare(num);
+    //           })}
+    //         </div>
+    //       );
+    //     })}
+    //   </div>
+    // );
+
+    // return (
+    //   <div>
+    //     <div className="board-row">
+    //       {this.renderSquare(0)}
+    //       {this.renderSquare(1)}
+    //       {this.renderSquare(2)}
+    //     </div>
+    //     <div className="board-row">
+    //       {this.renderSquare(3)}
+    //       {this.renderSquare(4)}
+    //       {this.renderSquare(5)}
+    //     </div>
+    //     <div className="board-row">
+    //       {this.renderSquare(6)}
+    //       {this.renderSquare(7)}
+    //       {this.renderSquare(8)}
+    //     </div>
+    //   </div>
+    // );
   }
 }
 
@@ -242,4 +269,3 @@ function removeHighlighting() {
     square.style.backgroundColor = '';
   });
 }
-
