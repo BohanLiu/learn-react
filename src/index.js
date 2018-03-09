@@ -26,6 +26,14 @@ function Square(props) {
   );
 }
 
+function OrderButton(props) {
+  return (
+    <button className="order-button" onClick={props.onClick}>
+      {props.reversed ? '▲' : '▼'}
+    </button>
+  );
+}
+
 class Board extends React.Component {
   /**
   * When you want to aggregate data from multiple children or to have two child components
@@ -118,6 +126,7 @@ class Game extends React.Component {
       }],
       stepNumber: 0,
       xIsNext: true,
+      reverseHistoryOrder: false,
     }
   }
 
@@ -165,6 +174,12 @@ class Game extends React.Component {
     });
   }
 
+  changeHistoryOrder() {
+    this.setState({
+      reverseHistoryOrder: !this.state.reverseHistoryOrder,
+    });
+  }
+
   render() {
     console.log('render game');
 
@@ -172,11 +187,11 @@ class Game extends React.Component {
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
 
-    const moves = history.map((step, move) => {
+    let moves = history.map((step, move) => {
       let desc, moveDesc;
       if (move) {
         desc = 'Go to move #' + move;
-        moveDesc = (<span>({step.move[0]}, {step.move[1]}, {step.move[2]})</span>);
+        moveDesc = `(${step.move[0]}, ${step.move[1]}, ${step.move[2]})`;
       } else {
         desc = 'Go to game start';
         moveDesc = null;
@@ -184,10 +199,14 @@ class Game extends React.Component {
       return (
         <li key={move}>
           <button className="jump-history-button" onClick={() => this.jumpTo(move)}>{desc}</button>
-          {moveDesc}
+          <span>{moveDesc}</span>
         </li>
       );
     });
+
+    if (this.state.reverseHistoryOrder) {
+      moves = moves.reverse();
+    }
 
     let status;
     if (winner) {
@@ -210,7 +229,11 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
-          <ol>{moves}</ol>
+          <OrderButton 
+            reversed={this.state.reverseHistoryOrder}
+            onClick={() => this.changeHistoryOrder()}
+          />
+          <ol reversed={this.state.reverseHistoryOrder}>{moves}</ol>
         </div>
       </div>
     );
